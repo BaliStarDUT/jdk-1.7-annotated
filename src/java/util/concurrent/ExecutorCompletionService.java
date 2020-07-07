@@ -41,7 +41,8 @@ package java.util.concurrent;
  * upon completion, placed on a queue accessible using {@code take}.
  * The class is lightweight enough to be suitable for transient use
  * when processing groups of tasks.
- *
+ * 一个CompletionService用一个提供Executr执行任务，该ca安排提交任务，完成后，
+ * 放queue，可以用take获取，这个足够简进行运行批任务
  * <p>
  *
  * <b>Usage Examples.</b>
@@ -71,7 +72,7 @@ package java.util.concurrent;
  * Suppose instead that you would like to use the first non-null result
  * of the set of tasks, ignoring any that encounter exceptions,
  * and cancelling all other tasks when the first one is ready:
- *
+ * 假如你想用一个非空结果，忽过有异常额，并且一个就绪，取消其他
  * <pre> {@code
  * void solve(Executor e,
  *            Collection<Callable<Result>> solvers)

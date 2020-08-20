@@ -35,7 +35,7 @@ import java.nio.channels.spi.SelectorProvider;
 
 /**
  * A selectable channel for stream-oriented connecting sockets.
- *
+ * 一个可选择的channle ，面向流的连接Sockets所提供。
  * <p> A socket channel is created by invoking one of the {@link #open open}
  * methods of this class.  It is not possible to create a channel for an arbitrary,
  * pre-existing socket. A newly-created socket channel is open but not yet
@@ -45,14 +45,17 @@ import java.nio.channels.spi.SelectorProvider;
  * method; once connected, a socket channel remains connected until it is
  * closed.  Whether or not a socket channel is connected may be determined by
  * invoking its {@link #isConnected isConnected} method.
- *
+ * 不可能为一个已经存在的socket创建一个channel。 一个新创建的Socket的channel是打开的但是没有连接。
+ *  尝试调用I/O操作，在一个没有连接的channel上，会导致一个NotYetConnectedException抛出。
+ * 一个socket channel可以通过调用connect方法来连接。一旦连接，一个socket channel 将保持连接知道它被关闭。
+ * 
  * <p> Socket channels support <i>non-blocking connection:</i>&nbsp;A socket
  * channel may be created and the process of establishing the link to the
  * remote socket may be initiated via the {@link #connect connect} method for
  * later completion by the {@link #finishConnect finishConnect} method.
  * Whether or not a connection operation is in progress may be determined by
  * invoking the {@link #isConnectionPending isConnectionPending} method.
- *
+ * Socket channel支持non-blocking的连接，一个socket channel 创建后，建立间接的过程可以通过connect方法。
  * <p> Socket channels support <i>asynchronous shutdown,</i> which is similar
  * to the asynchronous close operation specified in the {@link Channel} class.
  * If the input side of a socket is shut down by one thread while another
@@ -62,7 +65,8 @@ import java.nio.channels.spi.SelectorProvider;
  * thread while another thread is blocked in a write operation on the socket's
  * channel, then the blocked thread will receive an {@link
  * AsynchronousCloseException}.
- *
+ * Socket channel支持一步关闭，类似异步关闭一个Channel类。 如果一个socket的输入方被关闭，而读操作的线程被blocket，那么读操作将会收到一个-1.
+ * 如果输出侧被关闭，写入侧的线程被blocked，那么写入侧会收到一个AsynchronousClouseException。
  * <p> Socket options are configured using the {@link #setOption(SocketOption,Object)
  * setOption} method. Socket channels support the following options:
  * <blockquote>
@@ -107,7 +111,8 @@ import java.nio.channels.spi.SelectorProvider;
  * mutually synchronized against each other, and an attempt to initiate a read
  * or write operation while an invocation of one of these methods is in
  * progress will block until that invocation is complete.  </p>
- *
+ * Socket channel 在多线程情况下是安全使用的。 他们支持同并发读写，尽快在任意时刻至多一个线程读，至多一个线程写。
+ *  一个新的读写操作会block，直到前面的读写操作完成。
  * @author Mark Reinhold
  * @author JSR-51 Expert Group
  * @since 1.4
@@ -132,7 +137,7 @@ public abstract class SocketChannel
      * java.nio.channels.spi.SelectorProvider#openSocketChannel
      * openSocketChannel} method of the system-wide default {@link
      * java.nio.channels.spi.SelectorProvider} object.  </p>
-     *
+     * 调用系统侧默认的SelectorProvider的openSocketChannel方法被调用，
      * @return  A new socket channel
      *
      * @throws  IOException
@@ -312,18 +317,19 @@ public abstract class SocketChannel
 
     /**
      * Connects this channel's socket.
-     *
+     * 连接该channel的socket。
      * <p> If this channel is in non-blocking mode then an invocation of this
      * method initiates a non-blocking connection operation.  If the connection
      * is established immediately, as can happen with a local connection, then
      * this method returns <tt>true</tt>.  Otherwise this method returns
      * <tt>false</tt> and the connection operation must later be completed by
      * invoking the {@link #finishConnect finishConnect} method.
-     *
+     *如果改channel在non-blocking模式，那么该方法会初始化一个non-blocking的连接操作。
+     * 如果间接立马建立，则返回true，否则返回false，之后调用finishConnect()方法来关闭连接。
      * <p> If this channel is in blocking mode then an invocation of this
      * method will block until the connection is established or an I/O error
      * occurs.
-     *
+     * 如果一个channel在blocking模式，那么该方法会block直到连接建立或者IO异常发生。
      * <p> This method performs exactly the same security checks as the {@link
      * java.net.Socket} class.  That is, if a security manager has been
      * installed then this method verifies that its {@link
@@ -336,7 +342,7 @@ public abstract class SocketChannel
      * invocation is complete.  If a connection attempt is initiated but fails,
      * that is, if an invocation of this method throws a checked exception,
      * then the channel will be closed.  </p>
-     *
+     * 如果该方法后调用读写方法，则一直会block直到连接建立，
      * @param  remote
      *         The remote address to which this channel is to be connected
      *

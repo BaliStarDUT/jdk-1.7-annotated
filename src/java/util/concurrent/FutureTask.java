@@ -38,20 +38,23 @@ import java.util.concurrent.locks.LockSupport;
 
 /**
  * A cancellable asynchronous computation.  This class provides a base
+ * 一个可以取消的异步任务，提供了Future的基本实现，提供了start和cancel的方法，
  * implementation of {@link Future}, with methods to start and cancel
  * a computation, query to see if the computation is complete, and
  * retrieve the result of the computation.  The result can only be
+ * 提供query方法来查看计算是否完成，并获取计算结果。
  * retrieved when the computation has completed; the {@code get}
  * methods will block if the computation has not yet completed.  Once
+ * 结果只有当计算完成才能获得，get方法会block住如果计算没有完成。一旦计算完成
  * the computation has completed, the computation cannot be restarted
  * or cancelled (unless the computation is invoked using
  * {@link #runAndReset}).
- *
+ * 计算就不能重新开始或取消，除非运行runAndReset
  * <p>A {@code FutureTask} can be used to wrap a {@link Callable} or
  * {@link Runnable} object.  Because {@code FutureTask} implements
  * {@code Runnable}, a {@code FutureTask} can be submitted to an
  * {@link Executor} for execution.
- *
+ * 一个FutureTask可以包裹一个Callable或者Runnable对象，因此FutureTask可以被提交给Executor。
  * <p>In addition to serving as a standalone class, this class provides
  * {@code protected} functionality that may be useful when creating
  * customized task classes.
@@ -384,7 +387,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
 
     /**
      * Awaits completion or aborts on interrupt or timeout.
-     *
+     * 等待完成，或者等待超时取消
      * @param timed true if use timed waits
      * @param nanos time to wait, if timed
      * @return state upon completion

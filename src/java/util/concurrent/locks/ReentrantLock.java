@@ -43,6 +43,8 @@ import java.util.concurrent.atomic.*;
  * behavior and semantics as the implicit monitor lock accessed using
  * {@code synchronized} methods and statements, but with extended
  * capabilities.
+ * 一个可重入的相互排斥的锁，与使用synchronize方法和声明一样，有一样的行为和语义，
+ * 会持有隐含的monitor锁。但是它有一定扩展能力。
  *
  * <p>A {@code ReentrantLock} is <em>owned</em> by the thread last
  * successfully locking, but not yet unlocking it. A thread invoking
@@ -54,8 +56,8 @@ import java.util.concurrent.atomic.*;
  *
  * <p>The constructor for this class accepts an optional
  * <em>fairness</em> parameter.  When set {@code true}, under
- * contention, locks favor granting access to the longest-waiting
- * thread.  Otherwise this lock does not guarantee any particular
+ * contention, locks favor granting access to the longest-waiting  如果加了公平参数，lock会倾向于最长等待的线程来获取lock。
+ * thread.  Otherwise this lock does not guarantee any particular 否则lock不保证任何获取顺序。
  * access order.  Programs using fair locks accessed by many threads
  * may display lower overall throughput (i.e., are slower; often much
  * slower) than those using the default setting, but have smaller
@@ -69,7 +71,7 @@ import java.util.concurrent.atomic.*;
  * honor the fairness setting. It will succeed if the lock
  * is available even if other threads are waiting.
  *
- * <p>It is recommended practice to <em>always</em> immediately
+ * <p>It is recommended practice to <em>always</em> immediately 建议每次使用lock的lock方法时候，立即使用一个try块，如下面的例子。
  * follow a call to {@code lock} with a {@code try} block, most
  * typically in a before/after construction such as:
  *
@@ -94,7 +96,7 @@ import java.util.concurrent.atomic.*;
  * {@code getLockQueueLength}, as well as some associated
  * {@code protected} access methods that may be useful for
  * instrumentation and monitoring.
- *
+ * 提供了一些isLocked() getLockQueLength()等方法。
  * <p>Serialization of this class behaves in the same way as built-in
  * locks: a deserialized lock is in the unlocked state, regardless of
  * its state when serialized.

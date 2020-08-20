@@ -36,12 +36,13 @@ import java.security.PrivilegedExceptionAction;
  * requests to come in over the network. It performs some operation
  * based on that request, and then possibly returns a result to the requester.
  * <p>
+ * 该类实现了server sockets. 一个server socket 等待网络中一个请求过来。它根据请求做一下动作，然后可能会返回给请求一个结果。
  * The actual work of the server socket is performed by an instance
  * of the <code>SocketImpl</code> class. An application can
  * change the socket factory that creates the socket
  * implementation to configure itself to create sockets
  * appropriate to the local firewall.
- *
+ * 实际的工作是有一个SocketImpl实现类的实例来做的。一个应用可以改变一个socket factory来创建socket实现来创建socket网络连接。
  * @author  unascribed
  * @see     java.net.SocketImpl
  * @see     java.net.ServerSocket#setSocketFactory(java.net.SocketImplFactory)
@@ -97,16 +98,18 @@ class ServerSocket implements java.io.Closeable {
      * request to connect) is set to <code>50</code>. If a connection
      * indication arrives when the queue is full, the connection is refused.
      * <p>
+     * 进来的连接最大的队列长度设为50，如果当队列满了，再进来的连接会被拒绝。
      * If the application has specified a server socket factory, that
      * factory's <code>createSocketImpl</code> method is called to create
      * the actual socket implementation. Otherwise a "plain" socket is created.
-     * <p>
+     * <p> 如果一个应用指定了server socket factory, 当创建实际的socket实现的时候，factory的createSocketImpl方法会调用。
+     * 否则没有指定的话，一个plain的socket会创建。
      * If there is a security manager,
      * its <code>checkListen</code> method is called
      * with the <code>port</code> argument
      * as its argument to ensure the operation is allowed.
      * This could result in a SecurityException.
-     *
+     * 如果指定了一个security manager，他的ckeckListen方法会带着端口参数被调用，来确保该操作是可以的。
      *
      * @param      port  the port number, or <code>0</code> to use a port
      *                   number that is automatically allocated.
@@ -135,7 +138,7 @@ class ServerSocket implements java.io.Closeable {
      * automatically allocated, typically from an ephemeral port range.
      * This port number can then be retrieved by calling
      * {@link #getLocalPort getLocalPort}.
-     * <p>
+     * <p> 创建一个指定的Server socket绑定到一个port，并指定一个存量。
      * The maximum queue length for incoming connection indications (a
      * request to connect) is set to the <code>backlog</code> parameter. If
      * a connection indication arrives when the queue is full, the
@@ -157,8 +160,8 @@ class ServerSocket implements java.io.Closeable {
      * or may choose to ignore the parameter altogther. The value provided
      * should be greater than <code>0</code>. If it is less than or equal to
      * <code>0</code>, then an implementation specific default will be used.
-     * <P>
-     *
+     * <P>backlog参数是该socket上的最大请求连接数。特殊情况下，一个socket实现可能选择一个最大长度，
+     * 或者忽略该参数。
      * @param      port     the port number, or <code>0</code> to use a port
      *                      number that is automatically allocated.
      * @param      backlog  requested maximum length of the queue of incoming
@@ -294,7 +297,7 @@ class ServerSocket implements java.io.Closeable {
 
     /**
      * Creates the socket implementation.
-     *
+     * 创建一个socket的实现，如果没有指定实现，则用默认的SocksSocketImpl.
      * @throws IOException if creation fails
      * @since 1.4
      */
@@ -464,7 +467,7 @@ class ServerSocket implements java.io.Closeable {
     /**
      * Listens for a connection to be made to this socket and accepts
      * it. The method blocks until a connection is made.
-     *
+     * 监听一个连接该socket的连接，并连上。该方法会blocks直到一个连接创建。
      * <p>A new Socket <code>s</code> is created and, if there
      * is a security manager,
      * the security manager's <code>checkAccept</code> method is called
@@ -472,7 +475,7 @@ class ServerSocket implements java.io.Closeable {
      * <code>s.getPort()</code>
      * as its arguments to ensure the operation is allowed.
      * This could result in a SecurityException.
-     *
+     * 如果有一个security manager，一个新的socket连接会创建。
      * @exception  IOException  if an I/O error occurs when waiting for a
      *               connection.
      * @exception  SecurityException  if a security manager exists and its
@@ -504,7 +507,7 @@ class ServerSocket implements java.io.Closeable {
      * to return their own subclass of socket.  So a FooServerSocket
      * will typically hand this method an <i>empty</i> FooSocket.  On
      * return from implAccept the FooSocket will be connected to a client.
-     *
+     * serverSocket的子类使用此方法来覆盖accept()来返回他们的子类的socket。
      * @param s the Socket
      * @throws java.nio.channels.IllegalBlockingModeException
      *         if this socket has an associated channel,
@@ -575,12 +578,12 @@ class ServerSocket implements java.io.Closeable {
     /**
      * Returns the unique {@link java.nio.channels.ServerSocketChannel} object
      * associated with this socket, if any.
-     *
+     * 
      * <p> A server socket will have a channel if, and only if, the channel
      * itself was created via the {@link
      * java.nio.channels.ServerSocketChannel#open ServerSocketChannel.open}
      * method.
-     *
+     * 一个server socket将会有一个chanel，且只有该chanel本身是通过java.nio.chanels.ServerSocketChanel的open方法打开的时候才有。
      * @return  the server-socket channel associated with this socket,
      *          or <tt>null</tt> if this socket was not created
      *          for a channel
@@ -625,6 +628,8 @@ class ServerSocket implements java.io.Closeable {
      * prior to entering the blocking operation to have effect.  The
      * timeout must be > 0.
      * A timeout of zero is interpreted as an infinite timeout.
+     * 打开SO_TIMEOUT来指定超时时间，指定后，该ServerSocket的accept()方法只会block该指定时间。
+     * 指定0的话表示永远不超时。
      * @param timeout the specified timeout, in milliseconds
      * @exception SocketException if there is an error in
      * the underlying protocol, such as a TCP error.
@@ -664,6 +669,7 @@ class ServerSocket implements java.io.Closeable {
      * in a timeout state for a period of time after the connection
      * is closed (typically known as the <tt>TIME_WAIT</tt> state
      * or <tt>2MSL</tt> wait state).
+     * 开启SO_REFUSEADDR选项，当一个TCP连接关闭的时候，该server 的connection还能保留该一段时间。状态变为TIME_WAIT。
      * For applications using a well known socket address or port
      * it may not be possible to bind a socket to the required
      * <tt>SocketAddress</tt> if there is a connection in the
@@ -755,7 +761,7 @@ class ServerSocket implements java.io.Closeable {
      * When an application creates a new server socket, the socket
      * implementation factory's <code>createSocketImpl</code> method is
      * called to create the actual socket implementation.
-     * <p>
+     * <p> 当一个应用创建一个新ServerSocket的时候，该factory的createSocketImpl方法会调用。
      * Passing <code>null</code> to the method is a no-op unless the factory
      * was already set.
      * <p>
@@ -794,7 +800,7 @@ class ServerSocket implements java.io.Closeable {
      * The value of SO_RCVBUF is used both to set the size of the internal
      * socket receive buffer, and to set the size of the TCP receive window
      * that is advertized to the remote peer.
-     * <p>
+     * <p> 指定SO_RCVBUFF用来指定socket接受的buffer的大小，设定TCP接受窗口的大小来跟对端进行协商。
      * It is possible to change the value subsequently, by calling
      * {@link Socket#setReceiveBufferSize(int)}. However, if the application
      * wishes to allow a receive window larger than 64K bytes, as defined by RFC1323
@@ -802,11 +808,11 @@ class ServerSocket implements java.io.Closeable {
      * it is bound to a local address. This implies, that the ServerSocket must be
      * created with the no-argument constructor, then setReceiveBufferSize() must
      * be called and lastly the ServerSocket is bound to an address by calling bind().
-     * <p>
+     * <p> 一个应用如果想让接收窗口大于64K bytes，定义在RFC1323协议中规定，该大小值必须被设定在ServerSocket绑定一个本地地址之前。
      * Failure to do this will not cause an error, and the buffer size may be set to the
      * requested value but the TCP receive window in sockets accepted from
      * this ServerSocket will be no larger than 64K bytes.
-     *
+     * 设置失败的话，这个buffer size会被设定为请求值，但是TCP请求窗口将不会大于64K bytes.
      * @exception SocketException if there is an error
      * in the underlying protocol, such as a TCP error.
      *
@@ -855,13 +861,14 @@ class ServerSocket implements java.io.Closeable {
 
     /**
      * Sets performance preferences for this ServerSocket.
-     *
+     * 指定该ServerSocket的表现参数。
      * <p> Sockets use the TCP/IP protocol by default.  Some implementations
      * may offer alternative protocols which have different performance
      * characteristics than TCP/IP.  This method allows the application to
      * express its own preferences as to how these tradeoffs should be made
      * when the implementation chooses from the available protocols.
-     *
+     * 默认的Sockets使用TCP/IP协议。一些实现可能提供其他协议，有不同的表现参数。
+     * 该方法可以给出自定义的表现参数，来指定如何协调，当选择其他协议的时候。
      * <p> Performance preferences are described by three integers
      * whose values indicate the relative importance of short connection time,
      * low latency, and high bandwidth.  The absolute values of the integers
@@ -872,11 +879,13 @@ class ServerSocket implements java.io.Closeable {
      * <tt>(1, 0, 0)</tt>.  If the application prefers high bandwidth above low
      * latency, and low latency above short connection time, then it could
      * invoke this method with the values <tt>(0, 1, 2)</tt>.
-     *
+     * 指定短链接时间，低延迟，和高带宽的重要性。
+     * 如果应用喜欢短链接时间，超过低延迟，超过高带宽，可以设定为（1,0,0），
+     * 如果一个应用喜欢高带宽，超过低延迟， 低延迟又超过短链接时间，那么可以设定为（0,1,2）
      * <p> Invoking this method after this socket has been bound
      * will have no effect. This implies that in order to use this capability
      * requires the socket to be created with the no-argument constructor.
-     *
+     * socket被绑定后，再调用该方法就没有用了。
      * @param  connectionTime
      *         An <tt>int</tt> expressing the relative importance of a short
      *         connection time

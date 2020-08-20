@@ -51,20 +51,21 @@ import java.security.PrivilegedExceptionAction;
  * method will allow previously submitted tasks to execute before
  * terminating, while the {@link #shutdownNow} method prevents waiting
  * tasks from starting and attempts to stop currently executing tasks.
- shutdown方法允许已经提交的任务在停止前执行完毕，但是shutdownNow方法阻止等待的任务启动，并尝试停止正在运行的任务停止。
+ * shutdown方法会让已经提交的方法执行完毕再关闭，shutdownNow则直接停止正在运行的任务。
  * Upon termination, an executor has no tasks actively executing, no
  * tasks awaiting execution, and no new tasks can be submitted.  An
- 在终止的executor上，没有任务会被执行，没有任务会等待运行，也没有新任务能被提交。
+ * 一个Executor终止后，将没有任务运行，没有任务等待，没有任务能提交进来。
  * unused <tt>ExecutorService</tt> should be shut down to allow
  * reclamation of its resources.
- *一个没有用到的ExecutorService，需要被关闭已重新分配它占用的资源。
+ * 一个不用的ExecutorService应该关闭来回收资源。
  * <p> Method <tt>submit</tt> extends base method {@link
  * Executor#execute} by creating and returning a {@link Future} that
  * can be used to cancel execution and/or wait for completion.
- 方法submit继承父类方法Executor#execute，用于创建和返回Future结果，可以用来取消执行或等待完成。
+ * submit方法扩展基本方法execute来创建并返回一个Future结构，可以用来取消执行或等待完成。
  * Methods <tt>invokeAny</tt> and <tt>invokeAll</tt> perform the most
  * commonly useful forms of bulk execution, executing a collection of
  * tasks and then waiting for at least one, or all, to
+ * invokeAny方法和invokeAll方法用于批量执行，等待至少一个，或者全部执行完毕。
  * complete. (Class {@link ExecutorCompletionService} can be used to
  * write customized variants of these methods.)
  方法invokeAny和invokeAll体现了最有用的功能，在执行任务，或等待至少一个或全部来完成。
@@ -152,12 +153,14 @@ public interface ExecutorService extends Executor {
      * Initiates an orderly shutdown in which previously submitted
      * tasks are executed, but no new tasks will be accepted.
      * Invocation has no additional effect if already shut down.
-     *
+     * 能够顺序关闭，如果再次调用没有什么额外效果。
      * <p>This method does not wait for previously submitted tasks to
      * complete execution.  Use {@link #awaitTermination awaitTermination}
      * to do that.
-     *
+     * 该方法不等待提交的任务完全结束，使用awaitTermination来实现。
      * @throws SecurityException if a security manager exists and
+     * 如果一个security manager存在，关闭该ExecutorService可能会操作线程，如果调用方
+     * 没有获取java.lang.RuntimePermission的modifyThread权限，就会抛出异常。
      *         shutting down this ExecutorService may manipulate
      *         threads that the caller is not permitted to modify
      *         because it does not hold {@link

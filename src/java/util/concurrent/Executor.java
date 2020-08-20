@@ -120,7 +120,7 @@ package java.util.concurrent;
  * implement {@link ExecutorService}, which is a more extensive
  ExecutorService实现了Executor，更灵活
  * interface.  The {@link ThreadPoolExecutor} class provides an
- ThreadPoolExecutort提供了可扩展的现场池实现。
+ ThreadPoolExecutort提供了可扩展的线程池实现。
  * extensible thread pool implementation. The {@link Executors} class
  * provides convenient factory methods for these Executors.
  *Executors类提供了这些Executor实现的方便的工厂方法

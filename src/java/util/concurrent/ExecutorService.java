@@ -43,36 +43,42 @@ import java.security.PrivilegedExceptionAction;
  * An {@link Executor} that provides methods to manage termination and
  * methods that can produce a {@link Future} for tracking progress of
  * one or more asynchronous tasks.
- *
+ * 一个Executor提供了方法来管理停止，和方法来创建Future过程来跟踪一个或多个异步任务的过程。
  * <p> An <tt>ExecutorService</tt> can be shut down, which will cause
  * it to reject new tasks.  Two different methods are provided for
+ 一个ExecutorService可以被停止，这样它就会拒绝新任务。提供了2个方法来停止ExecutorService。
  * shutting down an <tt>ExecutorService</tt>. The {@link #shutdown}
  * method will allow previously submitted tasks to execute before
  * terminating, while the {@link #shutdownNow} method prevents waiting
  * tasks from starting and attempts to stop currently executing tasks.
+ shutdown方法允许已经提交的任务在停止前执行完毕，但是shutdownNow方法阻止等待的任务启动，并尝试停止正在运行的任务停止。
  * Upon termination, an executor has no tasks actively executing, no
  * tasks awaiting execution, and no new tasks can be submitted.  An
+ 在终止的executor上，没有任务会被执行，没有任务会等待运行，也没有新任务能被提交。
  * unused <tt>ExecutorService</tt> should be shut down to allow
  * reclamation of its resources.
- *
+ *一个没有用到的ExecutorService，需要被关闭已重新分配它占用的资源。
  * <p> Method <tt>submit</tt> extends base method {@link
  * Executor#execute} by creating and returning a {@link Future} that
  * can be used to cancel execution and/or wait for completion.
+ 方法submit继承父类方法Executor#execute，用于创建和返回Future结果，可以用来取消执行或等待完成。
  * Methods <tt>invokeAny</tt> and <tt>invokeAll</tt> perform the most
  * commonly useful forms of bulk execution, executing a collection of
  * tasks and then waiting for at least one, or all, to
  * complete. (Class {@link ExecutorCompletionService} can be used to
  * write customized variants of these methods.)
+ 方法invokeAny和invokeAll体现了最有用的功能，在执行任务，或等待至少一个或全部来完成。
+ ExecutorCompletionService可以用来自定义这些方法。
  *
  * <p>The {@link Executors} class provides factory methods for the
  * executor services provided in this package.
- *
+ *该包里提供了Executors来工厂方法创建executor services
  * <h3>Usage Examples</h3>
  *
  * Here is a sketch of a network service in which threads in a thread
  * pool service incoming requests. It uses the preconfigured {@link
  * Executors#newFixedThreadPool} factory method:
- *
+ *这里一个网络服务的例子，线程池里的线程来处理进入的请求。
  * <pre>
  * class NetworkService implements Runnable {
  *   private final ServerSocket serverSocket;
@@ -107,7 +113,8 @@ import java.security.PrivilegedExceptionAction;
  * The following method shuts down an <tt>ExecutorService</tt> in two phases,
  * first by calling <tt>shutdown</tt> to reject incoming tasks, and then
  * calling <tt>shutdownNow</tt>, if necessary, to cancel any lingering tasks:
- *
+ *下面的方法以2步来停止ExecutorService，首先调用shutdown来拒绝新提交任务，然后调用shutdownNow，如果必要
+ 取消任何驻留的任务。
  * <pre>
  * void shutdownAndAwaitTermination(ExecutorService pool) {
  *   pool.shutdown(); // Disable new tasks from being submitted
@@ -131,6 +138,7 @@ import java.security.PrivilegedExceptionAction;
  * <p>Memory consistency effects: Actions in a thread prior to the
  * submission of a {@code Runnable} or {@code Callable} task to an
  * {@code ExecutorService}
+ 线程中的任务执行优先于任务的提交。
  * <a href="package-summary.html#MemoryVisibility"><i>happen-before</i></a>
  * any actions taken by that task, which in turn <i>happen-before</i> the
  * result is retrieved via {@code Future.get()}.

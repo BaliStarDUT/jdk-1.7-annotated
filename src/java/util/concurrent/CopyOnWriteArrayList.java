@@ -42,24 +42,32 @@ import sun.misc.Unsafe;
  * A thread-safe variant of {@link java.util.ArrayList} in which all mutative
  * operations (<tt>add</tt>, <tt>set</tt>, and so on) are implemented by
  * making a fresh copy of the underlying array.
- *
+ * 另一个线程安全的ArralyList的实现，其中任何变化的操作，如add，set等，都依靠创建一个
+ 新的array的copy来实现。
  * <p> This is ordinarily too costly, but may be <em>more</em> efficient
  * than alternatives when traversal operations vastly outnumber
+ 这样的实现代价大，但是在遍历大量数据并进行操作的时候，这通常比不这样高效。
  * mutations, and is useful when you cannot or don't want to
  * synchronize traversals, yet need to preclude interference among
  * concurrent threads.  The "snapshot" style iterator method uses a
+ 尤其是当你不能或不想同步这个遍历过程的时候，但是你需要杜绝在并发线程中操作。
  * reference to the state of the array at the point that the iterator
  * was created. This array never changes during the lifetime of the
+ 快照类似的实现在遍历的时候使用一个在循环创建的时候的一个array的状态引用。
  * iterator, so interference is impossible and the iterator is
+ 这个array在循环整个过程中是不变的，所以是不可能出现干扰的，循环中也不会出现
+ ConcurrentModificationException的异常。
  * guaranteed not to throw <tt>ConcurrentModificationException</tt>.
  * The iterator will not reflect additions, removals, or changes to
  * the list since the iterator was created.  Element-changing
+ 只要循环过程创建了，循环过程中是不会反映list的变化的如add，remove和change。
  * operations on iterators themselves (<tt>remove</tt>, <tt>set</tt>, and
  * <tt>add</tt>) are not supported. These methods throw
  * <tt>UnsupportedOperationException</tt>.
- *
+ * 在循环过程中，这些操作remove，set，add也是不允许的，会抛出
+ UnsupportedOperationException异常。
  * <p>All elements are permitted, including <tt>null</tt>.
- *
+ *所有元素都允许null
  * <p>Memory consistency effects: As with other concurrent
  * collections, actions in a thread prior to placing an object into a
  * {@code CopyOnWriteArrayList}
@@ -80,9 +88,11 @@ public class CopyOnWriteArrayList<E>
     private static final long serialVersionUID = 8673264195747942595L;
 
     /** The lock protecting all mutators */
+    可重入锁来保护所有操作
     transient final ReentrantLock lock = new ReentrantLock();
 
     /** The array, accessed only via getArray/setArray. */
+    array只能通过getArray和setArray来操作
     private volatile transient Object[] array;
 
     /**

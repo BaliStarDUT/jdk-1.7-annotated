@@ -46,9 +46,9 @@ import sun.security.util.SecurityConstants;
  * A <i>thread</i> is a thread of execution in a program. The Java
  * Virtual Machine allows an application to have multiple threads of
  * execution running concurrently.
- 
+
  JVM允许一个应用程序有多个线程同时执行。
- 
+
  * <p>
  * Every thread has a priority. Threads with higher priority are
  * executed in preference to threads with lower priority. Each thread
@@ -57,39 +57,39 @@ import sun.security.util.SecurityConstants;
  * thread has its priority initially set equal to the priority of the
  * creating thread, and is a daemon thread if and only if the
  * creating thread is a daemon.
- 
+
  线程有优先级，优先级高的线程会优先执行；
  线程可能是守护线程也可能不是；
- 
+
  线程的优先级默认与创建此线程优先级相同；
  只有当创建线程的线程是守护线程时，被创建出的线程才能守护线程；
- 
+
  * <p>
  * When a Java Virtual Machine starts up, there is usually a single
  * non-daemon thread (which typically calls the method named
  * <code>main</code> of some designated class). The Java Virtual
  * Machine continues to execute threads until either of the following
  * occurs:
- 
+
  当一个JVM启动时，通常只有一个非守护线程，就是那个执行main方法的线程。
- 
+
  当满足以下任何一个条件时，JVM停止执行：
- 
+
  * <ul>
  * <li>The <code>exit</code> method of class <code>Runtime</code> has been
  *     called and the security manager has permitted the exit operation
  *     to take place.
- 
+
  Runtime类的exit方法被调用，并且安全管理器允许了这次方法调用；
- 
+
  * <li>All threads that are not daemon threads have died, either by
  *     returning from the call to the <code>run</code> method or by
  *     throwing an exception that propagates beyond the <code>run</code>
  *     method.
- 
+
  所有非守护线程执行结束。也就是线程的run方法顺利执行完，或者中间抛出异常
  结束了继续执行；
- 
+
  * </ul>
  * <p>
  * There are two ways to create a new thread of execution. One is to
@@ -118,10 +118,10 @@ import sun.security.util.SecurityConstants;
  *     p.start();
  * </pre></blockquote>
  * <p>
- 
+
  有两种方法可以创建一个线程。第一种方法是继承Thread类，并重写run方法，
  之后实例化这个类，并调用start方法；
- 
+
  * The other way to create a thread is to declare a class that
  * implements the <code>Runnable</code> interface. That class then
  * implements the <code>run</code> method. An instance of the class can
@@ -148,17 +148,17 @@ import sun.security.util.SecurityConstants;
  *     new Thread(p).start();
  * </pre></blockquote>
  * <p>
- 
+
  另一种方法是写一个类实现Runnable接口，之后用该类的对象作为构造方法参数，
  new一个Thread类对象，并调用其start方法；
- 
+
  * Every thread has a name for identification purposes. More than
  * one thread may have the same name. If a name is not specified when
  * a thread is created, a new name is generated for it.
- 
+
  每一个线程都有名字，但多个线程可以有相同的名字，
  如果创建线程时没有指定名字，那么将自动生成一个新的名字。
- 
+
  * <p>
  * Unless otherwise noted, passing a {@code null} argument to a constructor
  * or method in this class will cause a {@link NullPointerException} to be
@@ -227,7 +227,7 @@ class Thread implements Runnable {
      * not specify a stack size.  It is up to the VM to do whatever it
      * likes with this number; some VMs will ignore it.
      */
-	 
+
 	 栈大小，如果创建者没有指定该值，则默认为0由jvm决定栈大小。
 	 有些JVM可能会忽视此配置。
     private long stackSize;
@@ -297,7 +297,7 @@ class Thread implements Runnable {
 
     /**
      * Returns a reference to the currently executing thread object.
-     * 
+     *
 	 * 静态方法，用于返回一个当前正在执行的线程的引用。
 	 *
      * @return  the currently executing thread.
@@ -308,15 +308,15 @@ class Thread implements Runnable {
      * A hint to the scheduler that the current thread is willing to yield
      * its current use of a processor. The scheduler is free to ignore this
      * hint.
-	 
+
 	 该方法用来告诉JVM线程调度器，本线程想让出CPU的占用，但处理器可以忽略这个方法的调用。
-	 
+
      *
      * <p> Yield is a heuristic attempt to improve relative progression
      * between threads that would otherwise over-utilise a CPU. Its use
      * should be combined with detailed profiling and benchmarking to
      * ensure that it actually has the desired effect.
-	 
+
 	 Yield是一种实现线程间交互的方式，但可能给CPU带来更多的工作量。使用这个方法，应该进行充分的性能测试。
      *
      * <p> It is rarely appropriate to use this method. It may be useful
@@ -324,7 +324,7 @@ class Thread implements Runnable {
      * bugs due to race conditions. It may also be useful when designing
      * concurrency control constructs such as the ones in the
      * {@link java.util.concurrent.locks} package.
-	 
+
 	 Yield很少被使用。
      */
     public static native void yield();
@@ -334,8 +334,8 @@ class Thread implements Runnable {
      * execution) for the specified number of milliseconds, subject to
      * the precision and accuracy of system timers and schedulers. The thread
      * does not lose ownership of any monitors.
-	 
-	 让当前线程睡眠（停止执行）给定的微秒，睡眠期间线程不释放monitor锁。
+
+	 让当前线程睡眠（停止执行）给定的微秒，睡眠期间线程不释放任何对象的monitor。
      *
      * @param  millis
      *         the length of time to sleep in milliseconds
@@ -356,9 +356,9 @@ class Thread implements Runnable {
      * number of nanoseconds, subject to the precision and accuracy of system
      * timers and schedulers. The thread does not lose ownership of any
      * monitors.
-	 
+
 	 指定了微秒和纳秒的睡眠，从实现上看，其实并不支持纳秒。
-	 
+
      *
      * @param  millis
      *         the length of time to sleep in milliseconds
@@ -395,7 +395,7 @@ class Thread implements Runnable {
 
     /**
      * Initializes a Thread with the current AccessControlContext.
-	 
+
 	 使用当前AccessControlContext初始化线程
      * @see #init(ThreadGroup,Runnable,String,long,AccessControlContext)
      */
@@ -406,7 +406,7 @@ class Thread implements Runnable {
 
     /**
      * Initializes a Thread.
-	 
+
 	 初始化一个线程
      *
      * @param g the Thread group
@@ -486,7 +486,7 @@ class Thread implements Runnable {
     /**
      * Throws CloneNotSupportedException as a Thread can not be meaningfully
      * cloned. Construct a new Thread instead.
-	 
+
 	 thread对象不支持clone
      *
      * @throws  CloneNotSupportedException
@@ -503,7 +503,7 @@ class Thread implements Runnable {
      * {@code (null, null, gname)}, where {@code gname} is a newly generated
      * name. Automatically generated names are of the form
      * {@code "Thread-"+}<i>n</i>, where <i>n</i> is an integer.
-	 
+
 	 Thread空参构造方法，会自动生成一个线程名称。
      */
     public Thread() {
@@ -869,7 +869,7 @@ class Thread implements Runnable {
      * cleanup operation (note that the throwing of
      * <code>ThreadDeath</code> causes <code>finally</code> clauses of
      * <code>try</code> statements to be executed before the thread
-     * officially dies). 
+     * officially dies).
 	通常不应该catch ThreadDeath异常，finally中的代码会在线程真正退出前执行。
 	 If a <code>catch</code> clause catches a
      * <code>ThreadDeath</code> object, it is important to rethrow the
@@ -898,7 +898,7 @@ class Thread implements Runnable {
      *       <code>ThreadDeath</code> exception propagating up the stack).  If
      *       any of the objects previously protected by these monitors were in
      *       an inconsistent state, the damaged objects become visible to
-     *       other threads, potentially resulting in arbitrary behavior.  
+     *       other threads, potentially resulting in arbitrary behavior.
 	 这个方法已被废弃，因为它不安全。
 	 在stop时，thread会立刻释放所有的monitor锁。这可能会使一些Object处在不一致状态。
 	         Many
@@ -1023,7 +1023,7 @@ class Thread implements Runnable {
      * immediately from the selection operation, possibly with a non-zero
      * value, just as if the selector's {@link
      * java.nio.channels.Selector#wakeup wakeup} method were invoked.
-	 
+
 	 如果block在io操作上，那么中断状态将被设置，并且抛出相应异常。
      *
      * <p> If none of the previous conditions hold then this thread's interrupt
@@ -1061,7 +1061,7 @@ class Thread implements Runnable {
      * second call would return false (unless the current thread were
      * interrupted again, after the first call had cleared its interrupted
      * status and before the second call had examined it).
-	 
+
 	 查看线程中断状态是否被设置。该方法执行之后，这个中断状态会被清楚。
      *
      * <p>A thread interruption ignored because a thread was not alive
@@ -1117,7 +1117,7 @@ class Thread implements Runnable {
      *     <a href="{@docRoot}/../technotes/guides/concurrency/threadPrimitiveDeprecation.html">
      *     Why are Thread.stop, Thread.suspend and Thread.resume Deprecated?</a>.
      * @throws NoSuchMethodError always
-	 
+
 	 无用的方法。该方法从来没有实现过，因其容易导致思索。
      */
     @Deprecated
@@ -1622,7 +1622,7 @@ class Thread implements Runnable {
     /**
      * Returns <tt>true</tt> if and only if the current thread holds the
      * monitor lock on the specified object.
-	 
+
 	 查看线程是否持有指定对象的monitor锁
      *
      * <p>This method is designed to allow a program to assert that

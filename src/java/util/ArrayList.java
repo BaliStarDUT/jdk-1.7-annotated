@@ -29,43 +29,50 @@ package java.util;
  * Resizable-array implementation of the <tt>List</tt> interface.  Implements
  * all optional list operations, and permits all elements, including
  * <tt>null</tt>.  In addition to implementing the <tt>List</tt> interface,
+ List的可变长度实现。实现了所有list操作，允许所有元素类型包括null。
  * this class provides methods to manipulate the size of the array that is
  * used internally to store the list.  (This class is roughly equivalent to
  * <tt>Vector</tt>, except that it is unsynchronized.)
- *
+ *该实现提供了操作array长度的方法，这个方法大致相当于Vector，除了他是非同步的。
  * <p>The <tt>size</tt>, <tt>isEmpty</tt>, <tt>get</tt>, <tt>set</tt>,
  * <tt>iterator</tt>, and <tt>listIterator</tt> operations run in constant
  * time.  The <tt>add</tt> operation runs in <i>amortized constant time</i>,
  * that is, adding n elements requires O(n) time.  All of the other operations
  * run in linear time (roughly speaking).  The constant factor is low compared
  * to that for the <tt>LinkedList</tt> implementation.
- *
+ *该实现的size，isEmpty，get，set，iterator，listIterator方法都是常数运行时间，add方法运行
+ 在常数时间，也就是说，添加n个元素，需要O(n)倍的时间。所有操作都运行在线性时间内粗略的说。这个常数
+ 因子相比LinkedList实现是比较小的。
  * <p>Each <tt>ArrayList</tt> instance has a <i>capacity</i>.  The capacity is
  * the size of the array used to store the elements in the list.  It is always
  * at least as large as the list size.  As elements are added to an ArrayList,
  * its capacity grows automatically.  The details of the growth policy are not
  * specified beyond the fact that adding an element has constant amortized
  * time cost.
- *
+ *每个ArrayList实例都有一个capacity，容量至少和list的size一样大。当元素加到arraylist中时，
+ 它的capacity会自动增加。除了增加一个元素是常数时间外，增长机制是不指明的。
  * <p>An application can increase the capacity of an <tt>ArrayList</tt> instance
  * before adding a large number of elements using the <tt>ensureCapacity</tt>
  * operation.  This may reduce the amount of incremental reallocation.
- *
+ *可以通过ensureCapacity自主增加容量，在增加大量元素之前。这可以减少元素重新分配的时间。
  * <p><strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access an <tt>ArrayList</tt> instance concurrently,
  * and at least one of the threads modifies the list structurally, it
  * <i>must</i> be synchronized externally.  (A structural modification is
+ 注意：该实现是非同步的，如果多线程操作该ArrayList，如果至少一个线程修改list元素，则必须
+ 外部实现同步操作。
  * any operation that adds or deletes one or more elements, or explicitly
  * resizes the backing array; merely setting the value of an element is not
  * a structural modification.)  This is typically accomplished by
  * synchronizing on some object that naturally encapsulates the list.
- *
+ *这通常可以通过同步一些包含该list的object来实现。
  * If no such object exists, the list should be "wrapped" using the
  * {@link Collections#synchronizedList Collections.synchronizedList}
  * method.  This is best done at creation time, to prevent accidental
  * unsynchronized access to the list:<pre>
  *   List list = Collections.synchronizedList(new ArrayList(...));</pre>
- *
+ *如果没有object来帮助实现，那可以通过Collections.synchronizedList来实现一个同步的list
+
  * <p><a name="fail-fast"/>
  * The iterators returned by this class's {@link #iterator() iterator} and
  * {@link #listIterator(int) listIterator} methods are <em>fail-fast</em>:
@@ -77,7 +84,8 @@ package java.util;
  * concurrent modification, the iterator fails quickly and cleanly, rather
  * than risking arbitrary, non-deterministic behavior at an undetermined
  * time in the future.
- *
+ *通过iterator()或listIterator(int) 返回的遍历方法是fail-fast类型的。如果list在iterator
+ 创建后改变了，iterator会抛出ConcurrentModificationException异常。
  * <p>Note that the fail-fast behavior of an iterator cannot be guaranteed
  * as it is, generally speaking, impossible to make any hard guarantees in the
  * presence of unsynchronized concurrent modification.  Fail-fast iterators
@@ -85,7 +93,7 @@ package java.util;
  * Therefore, it would be wrong to write a program that depended on this
  * exception for its correctness:  <i>the fail-fast behavior of iterators
  * should be used only to detect bugs.</i>
- *
+ *fail-fast behavior 是不可依靠的特性，不要写出这样的程序。
  * <p>This class is a member of the
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.

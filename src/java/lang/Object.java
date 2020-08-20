@@ -263,8 +263,8 @@ public class Object {
      * the discretion of the implementation. A thread waits on an object's
      * monitor by calling one of the {@code wait} methods.
      *
-     * 唤醒正等待在该对象的线程中的一个。
-     *
+     * 唤醒正在等待该对象的monitor中的线程中的一个。选择是随意的，由实现决定。一个线程会在
+     * 调用wait方法时进入等待monitor中
      * <p>
      * The awakened thread will not be able to proceed until the current
      * thread relinquishes the lock on this object. The awakened thread will
@@ -318,7 +318,7 @@ public class Object {
      * being the next thread to lock this object.
      *
      * 被唤醒的线程们，需要竞争该对象上的锁，从而继续执行。
-     * 
+     *
      * <p>
      * This method should only be called by a thread that is the owner
      * of this object's monitor. See the {@code notify} method for a
@@ -338,10 +338,10 @@ public class Object {
      * {@link java.lang.Object#notify()} method or the
      * {@link java.lang.Object#notifyAll()} method for this object, or a
      * specified amount of time has elapsed.
-     * 阻塞当前线程，直到有其它线程调用了该对象的notify或notifyAll方法，或经过了指定的时间。 
+     * 阻塞当前线程，直到有其它线程调用了该对象的notify或notifyAll方法，或经过了指定的时间。
      * <p>
      * The current thread must own this object's monitor.
-     * 要执行该方法，当前线程必须是该对象的monitor。
+     * 要执行该方法，当前线程必须获取该对象的monitor。
      * <p>
      * This method causes the current thread (call it <var>T</var>) to
      * place itself in the wait set for this object and then to relinquish
@@ -366,7 +366,7 @@ public class Object {
      * <li>The specified amount of real time has elapsed, more or less.  If
      * {@code timeout} is zero, however, then real time is not taken into
      * consideration and the thread simply waits until notified.
-     * 经过了指定的时间。如果指定的时间为0，那么该线程将一直等待下去，直到上面三个条件发生。 
+     * 经过了指定的时间。如果指定的时间为0，那么该线程将一直等待下去，直到上面三个条件发生。
      *
      * </ul>
      * The thread <var>T</var> is then removed from the wait set for this
@@ -380,7 +380,7 @@ public class Object {
      * {@code wait} method, the synchronization state of the object and of
      * thread {@code T} is exactly as it was when the {@code wait} method
      * was invoked.
-     *
+     *线程从等待set集合中移除，重新开始线程调度。然后与其他线程竞争来获取object的monitor。
      * 当调用wait方法的线程被唤醒之后，它可以被正常调度，并从阻塞处继续执行。
      * 但是，被唤醒的线程必须重新获取它所需要的对象锁
      *
@@ -412,7 +412,7 @@ public class Object {
      * {@code InterruptedException} is thrown.  This exception is not
      * thrown until the lock status of this object has been restored as
      * described above.
-     * 
+     *
      * 如果当前线程正在等待时被其它线程中断，将抛出IterruptedException异常。
      * 需要注意的是，只有当前线程重新获取了对象锁，该异常才会被抛出。
      *
@@ -422,17 +422,18 @@ public class Object {
      * other objects on which the current thread may be synchronized remain
      * locked while the thread waits.
      *
-     * 注意，调用对象wait方法进入阻塞的线程，只会释放该对象的锁。该线程持有的其它对象的锁，并不会被释放。 
+     * 注意，调用对象wait方法进入阻塞的线程，只会释放该对象的锁。该线程持有的其它对象的锁，并不会被释放。
      *
      * <p>
      * This method should only be called by a thread that is the owner
      * of this object's monitor. See the {@code notify} method for a
      * description of the ways in which a thread can become the owner of
      * a monitor.
-     * 
+     *
      * 只有对象的monitor的持有者，才能调用对象的wait方法。
      *
      * @param      timeout   the maximum time to wait in milliseconds.
+     最大等待时间毫秒
      * @exception  IllegalArgumentException      if the value of timeout is
      *               negative.
      * @exception  IllegalMonitorStateException  if the current thread is not
